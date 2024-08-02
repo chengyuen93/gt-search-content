@@ -1,15 +1,25 @@
 import { useCallback, useState } from 'react';
 import { useApi } from './useApi';
-import { ApiRequestProps, ApiResponseProps } from '../types';
+import {
+  ApiRequestProps,
+  ApiResponseProps,
+  HighlightableText,
+  SearchSuggestionResponse,
+} from '../types';
 import { searchSuggestionsApi } from '../constants';
-import { SearchSuggestionResponse } from '../types/SearchSuggestionsResponse';
+import { MIN_SUGGESTION_TEXT_COUNT } from '../constants/search';
+import { filterPartialTextContainMatch } from '../utils';
 
 interface SearchSuggestionsProps {
   searchText: string;
 }
 
 interface SearchSuggestionReturnProps
-  extends Omit<ApiResponseProps<SearchSuggestionResponse>, 'sendRequest'> {
+  extends Omit<
+    ApiResponseProps<SearchSuggestionResponse>,
+    'data' | 'sendRequest'
+  > {
+  data: HighlightableText[];
   searchSuggestions: (props: SearchSuggestionsProps) => Promise<void>;
 }
 
@@ -19,25 +29,33 @@ export const useSearchSuggestions = (): SearchSuggestionReturnProps => {
     data: _,
     ...response
   } = useApi<SearchSuggestionResponse>();
-  const [data, setData] = useState<SearchSuggestionResponse | undefined>(
-    undefined
-  ); //todo - set type
+  const [data, setData] = useState<HighlightableText[]>([]);
 
   const searchSuggestions = useCallback(
     async ({ searchText }: SearchSuggestionsProps) => {
+      if (searchText.length < MIN_SUGGESTION_TEXT_COUNT) {
+        setData([]);
+        return;
+      }
+
       const request: ApiRequestProps = {
         url: searchSuggestionsApi.url,
         method: searchSuggestionsApi.method,
       };
+
       const data = await sendRequest(request);
       if (!data) {
-        setData(data);
+        setData([]);
         return;
       }
-      // todo - need to modify some values in the data to mock query response
 
-      console.log(data); // todo - filter
-      setData(data);
+      // need to modify some values in the data to mock query response
+
+      const filteredSuggestions = filterPartialTextContainMatch(
+        data.suggestions,
+        searchText
+      );
+      setData(filteredSuggestions);
     },
     [sendRequest]
   );

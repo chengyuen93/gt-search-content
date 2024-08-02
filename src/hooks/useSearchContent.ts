@@ -2,8 +2,11 @@ import { useCallback, useState } from 'react';
 import { useApi } from './useApi';
 
 import { searchContentApi } from '../constants';
-import { ApiRequestProps, ApiResponseProps } from '../types';
-import { SearchContentResponse } from '../types/SearchContentResponse';
+import {
+  ApiRequestProps,
+  ApiResponseProps,
+  SearchContentResponse,
+} from '../types';
 
 interface SearchContentProps {
   searchText: string;

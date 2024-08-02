@@ -1,12 +1,4 @@
-interface Offsets {
-  BeginOffset: number;
-  EndOffset: number;
-}
-
-interface HighlightableText {
-  Highlights: Offsets[];
-  Text: string;
-}
+import { HighlightableText } from './HighlightableText';
 
 interface ResultItems {
   DocumentExcerpt: HighlightableText;
