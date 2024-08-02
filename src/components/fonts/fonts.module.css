@@ -1,0 +1,56 @@
+/* font styles copied from figma */
+.official_text {
+  font-family: Source Sans Pro;
+  font-size: 9.89px;
+  font-weight: 400;
+  line-height: 12.43px;
+  letter-spacing: 0.49579858779907227px;
+  color: var(--gt-dark-grey);
+  white-space: break-spaces;
+}
+
+.official_text_bold {
+  font-weight: 700;
+  letter-spacing: 0.3897812068462372px;
+}
+
+.text {
+  font-family: Open Sans;
+  color: var(--gt-black);
+  white-space: break-spaces;
+}
+
+.huge {
+  font-size: 50px;
+  line-height: 60px;
+}
+
+.h3 {
+  font-size: 22px;
+  line-height: 28px;
+}
+
+.h4 {
+  font-size: 18px;
+  line-height: 26px;
+}
+
+.display_body {
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.14000000059604645px;
+}
+
+.h6 {
+  font-size: 14px;
+  line-height: 26px;
+  letter-spacing: 0.11999999731779099px;
+}
+
+.semibold {
+  font-weight: 700;
+}
+
+.regular {
+  font-weight: 400;
+}

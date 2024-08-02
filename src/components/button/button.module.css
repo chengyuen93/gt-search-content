@@ -1,0 +1,26 @@
+.button {
+  padding: 15px 34px;
+  border-radius: 8px;
+  background-color: var(--gt-primary);
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 0;
+}
+
+.with_icon {
+  padding: 15px 34px 15px 35px;
+}
+
+.button:hover {
+  opacity: 0.8;
+}
+
+.button_text {
+  color: var(--gt-white);
+}
+
+.text_with_icon {
+  margin-left: 6px;
+}
