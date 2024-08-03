@@ -14,4 +14,11 @@ export const LOGIN = "Let's Go!";
 // search page
 export const SEARCH = 'Search';
 export const NO_SUGGESTIONS = 'No Suggestions.';
+export const SUGGESTIONS_LOADING = 'Fetching ..';
+export const SUGGESTIONS_FAILED = 'Failed to fetch suggestions.';
 export const SUGGESTION_ITEM_CLASSNAME_IDENTIFIER = 'suggestion_item';
+export const RESULT_SUMMARY = (from: number, to: number, total: number) =>
+  `Showing ${from}-${to} of ${total} result${total > 1 ? 's' : ''}`;
+export const CONTENT_LOADING = 'Loading ..';
+export const CONTENT_FAILED = 'Error loading search results.';
+export const NO_CONTENT = 'No Search Results.';

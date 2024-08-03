@@ -1,6 +1,6 @@
 import { HighlightableText } from './HighlightableText';
 
-interface ResultItems {
+export interface ResultItem {
   DocumentExcerpt: HighlightableText;
   DocumentTitle: HighlightableText;
   DocumentId: string;
@@ -12,6 +12,6 @@ interface ResultItems {
 export interface SearchContentResponse {
   Page: number;
   PageSize: number;
-  ResultItems: ResultItems[];
+  ResultItems: ResultItem[];
   TotalNumberOfResults: number;
 }

@@ -11,7 +11,7 @@ import {
   MIN_SUGGESTION_TEXT_COUNT,
   MAX_SUGGESTION_COUNT,
 } from '../constants';
-import { filterPartialTextContainMatch } from '../utils';
+import { filterTextContainMatch } from '../utils';
 
 interface SearchSuggestionsProps {
   searchText: string;
@@ -36,6 +36,7 @@ export const useSearchSuggestions = (): SearchSuggestionReturnProps => {
 
   const searchSuggestions = useCallback(
     async ({ searchText }: SearchSuggestionsProps) => {
+      searchText = searchText.trim();
       if (searchText.length < MIN_SUGGESTION_TEXT_COUNT) {
         setData([]);
         return;
@@ -53,7 +54,7 @@ export const useSearchSuggestions = (): SearchSuggestionReturnProps => {
       }
 
       // need to modify some values in the data to mock query response
-      const filteredSuggestions = filterPartialTextContainMatch(
+      const filteredSuggestions = filterTextContainMatch(
         data.suggestions,
         searchText
       );

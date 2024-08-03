@@ -1,0 +1,36 @@
+.search_result_container {
+  margin: 48px 0;
+}
+
+.result_summary {
+  margin-bottom: 40px;
+}
+
+.result_item {
+  margin-bottom: 40px;
+}
+.result_item:last-child {
+  margin-bottom: 0;
+}
+
+.title {
+  color: var(--gt-primary);
+}
+.title:hover {
+  border-bottom: 1px solid var(--gt-primary);
+}
+.title_container {
+  margin-bottom: 12px;
+}
+.title_link_container {
+  cursor: pointer;
+}
+
+.link_container {
+  margin-top: 12px;
+  cursor: pointer;
+}
+
+.link {
+  color: var(--gt-link);
+}

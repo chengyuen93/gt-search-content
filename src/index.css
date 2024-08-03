@@ -18,6 +18,8 @@ body {
   --gt-primary: #1c76d5;
   --gt-white: white;
   --gt-shadow: #e0e4e559;
+  --gt-error: #f13b3b;
+  --gt-link: #686868;
 }
 
 #root {

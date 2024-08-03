@@ -4,10 +4,14 @@ import styles from './suggestions.module.css';
 import { H4, MixedHighlightText } from '../fonts';
 import {
   NO_SUGGESTIONS,
+  SUGGESTIONS_FAILED,
+  SUGGESTIONS_LOADING,
   SUGGESTION_ITEM_CLASSNAME_IDENTIFIER,
 } from '../../constants';
 
 interface SuggestionsProps {
+  isLoading: boolean;
+  isFailed: boolean;
   anchorEl: HTMLDivElement | null;
   suggestions: HighlightableText[];
   onSelected: (selectedText: string) => void;
@@ -17,6 +21,8 @@ interface SuggestionItemProps {
   suggestion: HighlightableText;
   selectable: boolean;
   isHighLighted: boolean;
+  isLoading: boolean;
+  isError: boolean;
   index?: number;
   onClick?: (text: string) => void;
   onHover?: (index: number) => void;
@@ -26,16 +32,23 @@ const SuggestionItem = ({
   suggestion,
   selectable,
   isHighLighted,
+  isLoading,
+  isError,
   index,
   onHover,
   onClick,
 }: SuggestionItemProps) => {
+  const isSelectable = useMemo(
+    () => selectable && !isLoading && !isError,
+    [selectable, isLoading, isError]
+  );
+
   const className = useMemo(() => {
     const cName = `${SUGGESTION_ITEM_CLASSNAME_IDENTIFIER} ${styles.suggestion_item}`;
-    return isHighLighted && selectable
+    return isHighLighted && isSelectable
       ? `${cName} ${styles.suggestion_item_highlighted}`
-      : cName;
-  }, [isHighLighted, selectable]);
+      : `${cName} ${styles.suggestion_item_error}`;
+  }, [isHighLighted, isSelectable]);
 
   const handleHover = useCallback(() => {
     onHover && typeof index === 'number' && onHover(index);
@@ -56,14 +69,22 @@ const SuggestionItem = ({
         info={suggestion}
         RegularTextComponent={H4}
         regularTextProps={
-          selectable
+          isSelectable
             ? undefined
-            : { className: styles.suggestion_text_disabled }
+            : {
+                className: isError
+                  ? styles.suggestion_text_error
+                  : styles.suggestion_text_disabled,
+              }
         }
         HighlightedTextComponent={H4}
         highlightTextProps={{
           isBold: true,
-          className: selectable ? undefined : styles.suggestion_text_disabled,
+          className: isSelectable
+            ? undefined
+            : isError
+            ? styles.suggestion_text_error
+            : styles.suggestion_text_disabled,
         }}
       />
     </div>
@@ -73,6 +94,8 @@ const SuggestionItem = ({
 export const Suggestions = ({
   anchorEl,
   suggestions,
+  isLoading,
+  isFailed,
   onSelected,
 }: SuggestionsProps) => {
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
@@ -109,6 +132,8 @@ export const Suggestions = ({
               suggestion={suggestion}
               selectable
               isHighLighted={index === highlightedIndex}
+              isLoading={false}
+              isError={false}
               onHover={onHover}
               onClick={onSelect}
             />
@@ -116,9 +141,18 @@ export const Suggestions = ({
         })
       ) : (
         <SuggestionItem
-          suggestion={{ Highlights: [], Text: NO_SUGGESTIONS }}
+          suggestion={{
+            Highlights: [],
+            Text: isLoading
+              ? SUGGESTIONS_LOADING
+              : isFailed
+              ? SUGGESTIONS_FAILED
+              : NO_SUGGESTIONS,
+          }}
           selectable={false}
           isHighLighted={false}
+          isLoading={isLoading}
+          isError={isFailed}
         />
       )}
     </div>

@@ -1,4 +1,5 @@
 import { HighlightableText, Offsets } from '../types';
+import { escapeString } from './escapeString';
 
 const extractHighlightOffsets = (matches: RegExpMatchArray[]): Offsets[] => {
   const offsets: Offsets[] = [];
@@ -13,11 +14,17 @@ const extractHighlightOffsets = (matches: RegExpMatchArray[]): Offsets[] => {
   return offsets;
 };
 
-export const filterPartialTextContainMatch = (
+export const filterTextContainMatch = (
   values: string[],
-  match: string
+  match: string,
+  matchWholeWord?: boolean
 ): HighlightableText[] => {
-  const regex = new RegExp(match, 'ig');
+  match = escapeString(match);
+  const regex = new RegExp(
+    matchWholeWord ? '\\w*' + match + '\\w*' : match,
+    'ig'
+  );
+
   const filteredData: HighlightableText[] = [];
   for (const value of values) {
     const matches = Array.from(value.matchAll(regex));

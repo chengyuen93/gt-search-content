@@ -22,17 +22,20 @@ import {
 } from '../../constants';
 
 interface SearchBarProps {
-  suggestions: HighlightableText[];
-  onSearch: (searchText: string) => void;
-  onSelected: () => void;
+  suggestions?: HighlightableText[];
+  suggestionsIsLoading?: boolean;
+  suggestionsIsFailed?: boolean;
+  onSelected?: () => void;
   onSuggest?: (searchText: string) => void;
+  onSearch: (searchText: string) => void;
 }
 
 export const SearchBar = ({
-  suggestions,
-  onSearch,
-  onSelected,
+  suggestionsIsLoading = false,
+  suggestionsIsFailed = false,
+  suggestions = [],
   onSuggest,
+  onSearch,
 }: SearchBarProps) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
@@ -61,17 +64,20 @@ export const SearchBar = ({
 
   const { isSmallScreen } = useResponsive();
 
-  const handleSearch = useCallback(() => {
-    onSearch(inputValue);
-    handleBlurInput();
-  }, [onSearch, inputValue]);
+  const handleSearch = useCallback(
+    (text?: string) => {
+      onSearch(text ?? inputValue);
+      handleBlurInput();
+    },
+    [onSearch, inputValue]
+  );
 
   const handleSelected = useCallback(
     (selectedText: string) => {
       setIsOpen(false);
       setInputValue(selectedText);
       setTimeout(() => {
-        handleSearch();
+        handleSearch(selectedText);
       }, 10);
     },
     [handleSearch]
@@ -157,12 +163,14 @@ export const SearchBar = ({
           <Suggestions
             anchorEl={inputContainerRef.current}
             suggestions={suggestions}
+            isLoading={suggestionsIsLoading}
+            isFailed={suggestionsIsFailed}
             onSelected={handleSelected}
           />
         )}
       </div>
 
-      <SearchButton isSmall={isSmallScreen} onClick={handleSearch} />
+      <SearchButton isSmall={isSmallScreen} onClick={() => handleSearch()} />
     </div>
   );
 };

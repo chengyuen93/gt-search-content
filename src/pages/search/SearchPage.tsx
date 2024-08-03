@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { PageWrapper } from '../page-wrapper';
 import { useCallback, useContext, useEffect } from 'react';
 
-import { SearchBar } from '../../components';
+import { SearchBar, SearchResults } from '../../components';
 import { AuthContext } from '../../context';
 import { FLEX_1, FLEX_COL_LEFT_START, PAGE, routes } from '../../constants';
 import { useSearchContent, useSearchSuggestions } from '../../hooks';
@@ -12,8 +12,18 @@ export const SearchPage = () => {
   const navigate = useNavigate();
   const { isLogin } = useContext(AuthContext);
 
-  const { searchContent, data: content } = useSearchContent();
-  const { searchSuggestions, data: suggestions } = useSearchSuggestions();
+  const {
+    searchContent,
+    data: content,
+    isLoading: contentIsLoading,
+    isFailed: contentIsFailed,
+  } = useSearchContent();
+  const {
+    searchSuggestions,
+    data: suggestions,
+    isLoading: suggestionsIsLoading,
+    isFailed: suggestionsIsFailed,
+  } = useSearchSuggestions();
 
   const handleSearch = useCallback(
     (searchText: string) => {
@@ -21,8 +31,6 @@ export const SearchPage = () => {
     },
     [searchContent]
   );
-
-  const handleSelected = useCallback(() => {}, []);
 
   const handleSuggest = useCallback(
     (searchText: string) => {
@@ -40,15 +48,22 @@ export const SearchPage = () => {
     <PageWrapper>
       <div className={`${styles.search_bar_container} ${PAGE}`}>
         <SearchBar
+          suggestionsIsLoading={suggestionsIsLoading}
+          suggestionsIsFailed={suggestionsIsFailed}
           suggestions={suggestions}
           onSearch={handleSearch}
-          onSelected={handleSelected}
           onSuggest={handleSuggest}
         />
       </div>
       <div
         className={`${styles.search_result_container} ${PAGE} ${FLEX_1} ${FLEX_COL_LEFT_START}`}
-      ></div>
+      >
+        <SearchResults
+          content={content}
+          isLoading={contentIsLoading}
+          isFailed={contentIsFailed}
+        />
+      </div>
     </PageWrapper>
   );
 };

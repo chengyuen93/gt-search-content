@@ -5,3 +5,4 @@ export * from './button';
 export * from './search-button';
 export * from './search-bar';
 export * from './suggestions';
+export * from './search-results';
