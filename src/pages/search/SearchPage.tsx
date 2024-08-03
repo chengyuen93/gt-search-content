@@ -17,6 +17,7 @@ export const SearchPage = () => {
     data: content,
     isLoading: contentIsLoading,
     isFailed: contentIsFailed,
+    isSuccessful: contentIsSuccessful,
   } = useSearchContent();
   const {
     searchSuggestions,
@@ -62,6 +63,7 @@ export const SearchPage = () => {
           content={content}
           isLoading={contentIsLoading}
           isFailed={contentIsFailed}
+          isSucessful={contentIsSuccessful}
         />
       </div>
     </PageWrapper>

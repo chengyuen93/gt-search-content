@@ -19,6 +19,7 @@ interface ResultSummaryProps {
 interface SearchResultsProps {
   isLoading: boolean;
   isFailed: boolean;
+  isSucessful: boolean;
   content: SearchContentResponse | undefined;
 }
 
@@ -65,8 +66,9 @@ export const SearchResults = ({
   content,
   isLoading,
   isFailed,
+  isSucessful,
 }: SearchResultsProps) => {
-  const hasNoCotent = useMemo(() => !content?.TotalNumberOfResults, [content]);
+  const hasNoContent = useMemo(() => !content?.TotalNumberOfResults, [content]);
   const summaryData: ResultSummaryProps | undefined = useMemo(() => {
     if (!content) return;
 
@@ -86,8 +88,8 @@ export const SearchResults = ({
     <div className={styles.search_result_container}>
       {isLoading && <H3>{CONTENT_LOADING}</H3>}
       {isFailed && <H3>{CONTENT_FAILED}</H3>}
-      {hasNoCotent && <H3>{NO_CONTENT}</H3>}
-      {summaryData && !hasNoCotent && !isFailed && !isLoading && (
+      {hasNoContent && isSucessful && <H3>{NO_CONTENT}</H3>}
+      {summaryData && !hasNoContent && !isFailed && !isLoading && (
         <>
           <ResultSummary
             from={summaryData.from}

@@ -1,6 +1,7 @@
 import {
   ChangeEvent,
   FocusEvent,
+  KeyboardEvent,
   useCallback,
   useEffect,
   useMemo,
@@ -19,6 +20,7 @@ import {
   SUGGESTION_ITEM_CLASSNAME_IDENTIFIER,
   MIN_SHOW_CLEAR_BUTTON_TEXT_COUNT,
   MIN_SUGGESTION_TEXT_COUNT,
+  HIGHLIGHTED_SUGGESTION_ITEM_CLASSNAME_IDENTIFIER,
 } from '../../constants';
 
 interface SearchBarProps {
@@ -134,6 +136,21 @@ export const SearchBar = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused, suggestions, showSuggestions]);
 
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (
+      e.key !== 'Enter' ||
+      e.altKey ||
+      e.ctrlKey ||
+      e.shiftKey ||
+      !!document.getElementsByClassName(
+        HIGHLIGHTED_SUGGESTION_ITEM_CLASSNAME_IDENTIFIER
+      ).length
+    )
+      return;
+
+    handleSearch();
+  };
+
   return (
     <div className={searchBarClassName}>
       <div
@@ -149,6 +166,7 @@ export const SearchBar = ({
           onFocus={onFocus}
           onBlur={onBlur}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
         />
         {inputValue.length >= MIN_SHOW_CLEAR_BUTTON_TEXT_COUNT && (
           <Image

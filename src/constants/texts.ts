@@ -17,6 +17,8 @@ export const NO_SUGGESTIONS = 'No Suggestions.';
 export const SUGGESTIONS_LOADING = 'Fetching ..';
 export const SUGGESTIONS_FAILED = 'Failed to fetch suggestions.';
 export const SUGGESTION_ITEM_CLASSNAME_IDENTIFIER = 'suggestion_item';
+export const HIGHLIGHTED_SUGGESTION_ITEM_CLASSNAME_IDENTIFIER =
+  'highlighted_suggestion_item';
 export const RESULT_SUMMARY = (from: number, to: number, total: number) =>
   `Showing ${from}-${to} of ${total} result${total > 1 ? 's' : ''}`;
 export const CONTENT_LOADING = 'Loading ..';

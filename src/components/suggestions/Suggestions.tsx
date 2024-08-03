@@ -1,8 +1,9 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { HighlightableText } from '../../types';
 import styles from './suggestions.module.css';
 import { H4, MixedHighlightText } from '../fonts';
 import {
+  HIGHLIGHTED_SUGGESTION_ITEM_CLASSNAME_IDENTIFIER,
   NO_SUGGESTIONS,
   SUGGESTIONS_FAILED,
   SUGGESTIONS_LOADING,
@@ -46,8 +47,8 @@ const SuggestionItem = ({
   const className = useMemo(() => {
     const cName = `${SUGGESTION_ITEM_CLASSNAME_IDENTIFIER} ${styles.suggestion_item}`;
     return isHighLighted && isSelectable
-      ? `${cName} ${styles.suggestion_item_highlighted}`
-      : `${cName} ${styles.suggestion_item_error}`;
+      ? `${cName} ${styles.suggestion_item_highlighted} ${HIGHLIGHTED_SUGGESTION_ITEM_CLASSNAME_IDENTIFIER}`
+      : cName;
   }, [isHighLighted, isSelectable]);
 
   const handleHover = useCallback(() => {
@@ -117,6 +118,43 @@ export const Suggestions = ({
     },
     [onSelected]
   );
+
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (!suggestions.length) return;
+
+      if (e.ctrlKey || e.altKey || e.shiftKey) return;
+
+      if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        setHighlightedIndex((index) => {
+          if (e.key === 'ArrowUp') {
+            if (index === -1 || index === 0) return suggestions.length - 1;
+            return index - 1;
+          }
+          if (e.key === 'ArrowDown') {
+            if (index === -1 || index === suggestions.length - 1) return 0;
+            return index + 1;
+          }
+
+          return index;
+        });
+        return;
+      }
+
+      if (e.key === 'Enter' && highlightedIndex !== -1) {
+        onSelect(suggestions[highlightedIndex].Text);
+      }
+    },
+    [suggestions, highlightedIndex, onSelect]
+  );
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleKeyDown]);
 
   return (
     <div className={styles.suggestion_container} style={containerStyles}>
