@@ -14,3 +14,4 @@ export const LOGIN = "Let's Go!";
 // search page
 export const SEARCH = 'Search';
 export const NO_SUGGESTIONS = 'No Suggestions.';
+export const SUGGESTION_ITEM_CLASSNAME_IDENTIFIER = 'suggestion_item';

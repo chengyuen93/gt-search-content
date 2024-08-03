@@ -17,6 +17,7 @@ body {
   --gt-black: #282828;
   --gt-primary: #1c76d5;
   --gt-white: white;
+  --gt-shadow: #e0e4e559;
 }
 
 #root {
@@ -24,4 +25,34 @@ body {
   width: 100vw;
   display: flex;
   flex-direction: column;
+}
+
+.flex_1 {
+  flex: 1;
+}
+
+.flex_column_center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex_column_left_start {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.page {
+  padding-left: 160px;
+  padding-right: 160px;
+}
+
+@media only screen and (max-width: 700px) {
+  .page {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 }

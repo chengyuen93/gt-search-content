@@ -4,8 +4,9 @@ import { useCallback, useContext, useEffect } from 'react';
 
 import { SearchBar } from '../../components';
 import { AuthContext } from '../../context';
-import { routes } from '../../constants';
+import { FLEX_1, FLEX_COL_LEFT_START, PAGE, routes } from '../../constants';
 import { useSearchContent, useSearchSuggestions } from '../../hooks';
+import styles from './search.module.css';
 
 export const SearchPage = () => {
   const navigate = useNavigate();
@@ -37,12 +38,17 @@ export const SearchPage = () => {
 
   return (
     <PageWrapper>
-      <SearchBar
-        suggestions={suggestions}
-        onSearch={handleSearch}
-        onSelected={handleSelected}
-        onSuggest={handleSuggest}
-      />
+      <div className={`${styles.search_bar_container} ${PAGE}`}>
+        <SearchBar
+          suggestions={suggestions}
+          onSearch={handleSearch}
+          onSelected={handleSelected}
+          onSuggest={handleSuggest}
+        />
+      </div>
+      <div
+        className={`${styles.search_result_container} ${PAGE} ${FLEX_1} ${FLEX_COL_LEFT_START}`}
+      ></div>
     </PageWrapper>
   );
 };

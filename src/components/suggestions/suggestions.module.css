@@ -1,7 +1,7 @@
 .suggestion_container {
   padding: 8px 0px;
   border-radius: 0px 0px 8px 8px;
-  box-shadow: 0px 4px 8px 4px #e0e4e559;
+  box-shadow: 0px 4px 8px 4px var(--gt-shadow);
   background-color: var(--gt-white);
   position: absolute;
   left: 0;
@@ -10,6 +10,10 @@
 .suggestion_item {
   padding: 8.5px 24px;
   background-color: var(--gt-white);
+  cursor: pointer;
+}
+.suggestion_item:has(.suggestion_text_disabled) {
+  cursor: default;
 }
 
 .suggestion_item_highlighted {

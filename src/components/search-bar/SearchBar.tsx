@@ -1,6 +1,6 @@
 import {
   ChangeEvent,
-  MouseEvent,
+  FocusEvent,
   useCallback,
   useEffect,
   useMemo,
@@ -13,12 +13,13 @@ import { Image } from '../image';
 import { SharedImages } from '../../assets';
 import fontStyles from '../fonts/fonts.module.css';
 import { useDebouncedValue, useResponsive } from '../../hooks';
-import {
-  MIN_SHOW_CLEAR_BUTTON_TEXT_COUNT,
-  MIN_SUGGESTION_TEXT_COUNT,
-} from '../../constants/search';
 import { HighlightableText } from '../../types';
 import { Suggestions } from '../suggestions';
+import {
+  SUGGESTION_ITEM_CLASSNAME_IDENTIFIER,
+  MIN_SHOW_CLEAR_BUTTON_TEXT_COUNT,
+  MIN_SUGGESTION_TEXT_COUNT,
+} from '../../constants';
 
 interface SearchBarProps {
   suggestions: HighlightableText[];
@@ -36,6 +37,8 @@ export const SearchBar = ({
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const showSuggestions = useMemo(() => !!onSuggest, [onSuggest]);
 
   const debouncedValue = useDebouncedValue({
     value: inputValue,
@@ -60,8 +63,19 @@ export const SearchBar = ({
 
   const handleSearch = useCallback(() => {
     onSearch(inputValue);
-    setIsOpen(false); // todo - might not need this
+    handleBlurInput();
   }, [onSearch, inputValue]);
+
+  const handleSelected = useCallback(
+    (selectedText: string) => {
+      setIsOpen(false);
+      setInputValue(selectedText);
+      setTimeout(() => {
+        handleSearch();
+      }, 10);
+    },
+    [handleSearch]
+  );
 
   const handleClear = useCallback(() => {
     setInputValue('');
@@ -72,22 +86,27 @@ export const SearchBar = ({
     setInputValue(value);
   };
 
-  const handleFocusInput = (e: MouseEvent) => {
+  const handleFocusInput = () => {
     if (!inputRef.current) return;
 
     inputRef.current.focus();
   };
 
+  const handleBlurInput = () => {
+    if (!inputRef.current) return;
+
+    inputRef.current.blur();
+  };
+
   const onFocus = () => {
     setIsFocused(true);
   };
-  const onBlur = () => {
-    setTimeout(() => {
+  const onBlur = (e: FocusEvent) => {
+    if (
+      !e.relatedTarget?.classList.contains(SUGGESTION_ITEM_CLASSNAME_IDENTIFIER)
+    ) {
       setIsFocused(false);
-
-      if (!inputRef.current) return;
-      inputRef.current.blur();
-    }, 200);
+    }
   };
 
   useEffect(() => {
@@ -97,13 +116,17 @@ export const SearchBar = ({
   }, [debouncedValue, onSuggest]);
 
   useEffect(() => {
-    setIsOpen(isFocused && inputValue.length >= MIN_SUGGESTION_TEXT_COUNT);
+    setIsOpen(
+      showSuggestions &&
+        isFocused &&
+        inputValue.length >= MIN_SUGGESTION_TEXT_COUNT
+    );
 
     // set `suggestions` as dependency because `setIsOpen` should be triggered when `suggestions` change
     // but whether it should be open depends on `inputValue.length` is more than a certain character length
     // but we do not want the fn to be trigger everytime `inputValue.length` changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFocused, suggestions]);
+  }, [isFocused, suggestions, showSuggestions]);
 
   return (
     <div className={searchBarClassName}>
@@ -134,6 +157,7 @@ export const SearchBar = ({
           <Suggestions
             anchorEl={inputContainerRef.current}
             suggestions={suggestions}
+            onSelected={handleSelected}
           />
         )}
       </div>

@@ -6,8 +6,11 @@ import {
   HighlightableText,
   SearchSuggestionResponse,
 } from '../types';
-import { searchSuggestionsApi } from '../constants';
-import { MIN_SUGGESTION_TEXT_COUNT } from '../constants/search';
+import {
+  searchSuggestionsApi,
+  MIN_SUGGESTION_TEXT_COUNT,
+  MAX_SUGGESTION_COUNT,
+} from '../constants';
 import { filterPartialTextContainMatch } from '../utils';
 
 interface SearchSuggestionsProps {
@@ -50,12 +53,12 @@ export const useSearchSuggestions = (): SearchSuggestionReturnProps => {
       }
 
       // need to modify some values in the data to mock query response
-
       const filteredSuggestions = filterPartialTextContainMatch(
         data.suggestions,
         searchText
       );
-      setData(filteredSuggestions);
+      // display only the top 6 results
+      setData(filteredSuggestions.slice(0, MAX_SUGGESTION_COUNT));
     },
     [sendRequest]
   );

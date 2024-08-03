@@ -1,6 +1,13 @@
 import { useCallback, useContext } from 'react';
 import { Button, H3 } from '../../components';
-import { HELLO_MESSAGE, LOGIN, routes } from '../../constants';
+import {
+  FLEX_1,
+  FLEX_COL_CENTER,
+  HELLO_MESSAGE,
+  LOGIN,
+  PAGE,
+  routes,
+} from '../../constants';
 import { PageWrapper } from '../page-wrapper';
 import styles from './login.module.css';
 import { useNavigate } from 'react-router-dom';
@@ -17,8 +24,10 @@ export const LoginPage = () => {
 
   return (
     <PageWrapper>
-      <H3 className={styles.text}>{HELLO_MESSAGE}</H3>
-      <Button className={styles.button} text={LOGIN} onClick={handleLogin} />
+      <div className={`${FLEX_1} ${FLEX_COL_CENTER} ${PAGE}`}>
+        <H3 className={styles.text}>{HELLO_MESSAGE}</H3>
+        <Button className={styles.button} text={LOGIN} onClick={handleLogin} />
+      </div>
     </PageWrapper>
   );
 };

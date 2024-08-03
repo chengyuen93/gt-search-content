@@ -1,37 +1,57 @@
-import { MouseEvent, useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { HighlightableText } from '../../types';
 import styles from './suggestions.module.css';
 import { H4, MixedHighlightText } from '../fonts';
-import { NO_SUGGESTIONS } from '../../constants';
+import {
+  NO_SUGGESTIONS,
+  SUGGESTION_ITEM_CLASSNAME_IDENTIFIER,
+} from '../../constants';
 
 interface SuggestionsProps {
   anchorEl: HTMLDivElement | null;
   suggestions: HighlightableText[];
+  onSelected: (selectedText: string) => void;
 }
 
 interface SuggestionItemProps {
   suggestion: HighlightableText;
   selectable: boolean;
   isHighLighted: boolean;
-  onClick?: (e: MouseEvent) => void;
-  onHover?: () => void;
+  index?: number;
+  onClick?: (text: string) => void;
+  onHover?: (index: number) => void;
 }
 
 const SuggestionItem = ({
   suggestion,
   selectable,
   isHighLighted,
+  index,
   onHover,
   onClick,
 }: SuggestionItemProps) => {
   const className = useMemo(() => {
+    const cName = `${SUGGESTION_ITEM_CLASSNAME_IDENTIFIER} ${styles.suggestion_item}`;
     return isHighLighted && selectable
-      ? `${styles.suggestion_item} ${styles.suggestion_item_highlighted}`
-      : styles.suggestion_item;
+      ? `${cName} ${styles.suggestion_item_highlighted}`
+      : cName;
   }, [isHighLighted, selectable]);
 
+  const handleHover = useCallback(() => {
+    onHover && typeof index === 'number' && onHover(index);
+  }, [index, onHover]);
+
+  const handleClick = useCallback(() => {
+    onClick && onClick(suggestion.Text);
+  }, [suggestion.Text, onClick]);
+
   return (
-    <div className={className} onMouseEnter={onHover} onClick={onClick}>
+    <div
+      tabIndex={-1}
+      className={className}
+      onMouseEnter={handleHover}
+      onClick={handleClick}
+    >
       <MixedHighlightText
         info={suggestion}
         RegularTextComponent={H4}
@@ -50,7 +70,11 @@ const SuggestionItem = ({
   );
 };
 
-export const Suggestions = ({ anchorEl, suggestions }: SuggestionsProps) => {
+export const Suggestions = ({
+  anchorEl,
+  suggestions,
+  onSelected,
+}: SuggestionsProps) => {
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
   const containerStyles = useMemo(
     () => ({
@@ -64,9 +88,12 @@ export const Suggestions = ({ anchorEl, suggestions }: SuggestionsProps) => {
     setHighlightedIndex(index);
   }, []);
 
-  const onSelect = useCallback((e: MouseEvent) => {
-    e.stopPropagation();
-  }, []);
+  const onSelect = useCallback(
+    (text: string) => {
+      onSelected(text);
+    },
+    [onSelected]
+  );
 
   return (
     <div className={styles.suggestion_container} style={containerStyles}>
@@ -78,10 +105,11 @@ export const Suggestions = ({ anchorEl, suggestions }: SuggestionsProps) => {
           return (
             <SuggestionItem
               key={key}
+              index={index}
               suggestion={suggestion}
               selectable
               isHighLighted={index === highlightedIndex}
-              onHover={() => onHover(index)}
+              onHover={onHover}
               onClick={onSelect}
             />
           );

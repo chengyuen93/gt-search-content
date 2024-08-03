@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Router } from './router/Router';
 import './index.css';
+import { Router } from './router/Router';
 import { AuthProvider } from './context';
 
 const root = ReactDOM.createRoot(
