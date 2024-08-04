@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { PropsWithChildren, useMemo } from 'react';
 import {
   CONTENT_FAILED,
   CONTENT_LOADING,
@@ -62,6 +62,10 @@ const SearchResultItem = ({ resultItem }: ResultItemProps) => {
   );
 };
 
+const ResultWrapper = ({ children }: PropsWithChildren) => (
+  <div className={styles.search_result_container}>{children}</div>
+);
+
 export const SearchResults = ({
   content,
   isLoading,
@@ -84,30 +88,47 @@ export const SearchResults = ({
     };
   }, [content]);
 
+  if (isLoading) {
+    return (
+      <ResultWrapper>
+        <H3>{CONTENT_LOADING}</H3>
+      </ResultWrapper>
+    );
+  }
+
+  if (isFailed) {
+    return (
+      <ResultWrapper>
+        <H3 isError>{CONTENT_FAILED}</H3>
+      </ResultWrapper>
+    );
+  }
+
+  if (isSucessful && hasNoContent) {
+    return (
+      <ResultWrapper>
+        <H3>{NO_CONTENT}</H3>
+      </ResultWrapper>
+    );
+  }
+
   return (
-    <div className={styles.search_result_container}>
-      {isLoading && <H3>{CONTENT_LOADING}</H3>}
-      {!isLoading && isFailed && <H3 isError>{CONTENT_FAILED}</H3>}
-      {!isLoading && hasNoContent && isSucessful && <H3>{NO_CONTENT}</H3>}
-      {summaryData && !hasNoContent && !isFailed && !isLoading && (
-        <>
-          <ResultSummary
-            from={summaryData.from}
-            to={summaryData.to}
-            total={summaryData.total}
-          />
-          {content?.ResultItems.map((result) => (
-            <SearchResultItem
-              key={
-                result.Id
-                  ? `${result.Id}-${result.DocumentId}`
-                  : result.DocumentId
-              }
-              resultItem={result}
-            />
-          ))}
-        </>
+    <ResultWrapper>
+      {summaryData && (
+        <ResultSummary
+          from={summaryData.from}
+          to={summaryData.to}
+          total={summaryData.total}
+        />
       )}
-    </div>
+      {content?.ResultItems.map((result) => (
+        <SearchResultItem
+          key={
+            result.Id ? `${result.Id}-${result.DocumentId}` : result.DocumentId
+          }
+          resultItem={result}
+        />
+      ))}
+    </ResultWrapper>
   );
 };

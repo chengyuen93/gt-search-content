@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface DebouncedValueProps<T> {
   value: T;
@@ -15,22 +15,23 @@ export const useDebouncedValue = <T>({
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  const handleClearTimeout = useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  }, []);
+
   useEffect(() => {
     timeoutRef.current = setTimeout(() => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
-      }
+      handleClearTimeout();
       setDebouncedValue(value);
     }, timeout);
 
     return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
-      }
+      handleClearTimeout();
     };
-  }, [setDebouncedValue, value, timeout]);
+  }, [setDebouncedValue, value, timeout, handleClearTimeout]);
 
   return debouncedValue;
 };

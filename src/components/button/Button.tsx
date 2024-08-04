@@ -1,6 +1,7 @@
 import { ReactNode, useMemo } from 'react';
 import styles from './button.module.css';
 import { H4 } from '../fonts';
+import { FLEX_ROW_CENTER } from '../../constants';
 
 interface ButtonProps {
   icon?: ReactNode;
@@ -11,9 +12,10 @@ interface ButtonProps {
 
 export const Button = ({ icon, text, className, onClick }: ButtonProps) => {
   const classNameString = useMemo(() => {
-    let buttonClass = styles.button;
-    if (text && icon) buttonClass = `${buttonClass} ${styles.with_icon}`;
-    if (!text && icon) buttonClass = `${buttonClass} ${styles.icon_only}`;
+    let buttonClass = `${styles.button} ${FLEX_ROW_CENTER}`;
+    if (icon) {
+      buttonClass += ` ${text ? styles.with_icon : styles.icon_only}`;
+    }
     return className ? `${className} ${buttonClass}` : buttonClass;
   }, [className, icon, text]);
 

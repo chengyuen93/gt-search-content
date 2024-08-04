@@ -1,9 +1,6 @@
 .search_bar {
   height: 56px;
   width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
   border-radius: 8px;
   border: 1px var(--gt-light-grey) solid;
   color: var(--gt-black);
@@ -21,9 +18,6 @@
   flex: 1;
   padding-right: 12px;
   padding-left: 22.98px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
   height: 100%;
   position: relative;
 }

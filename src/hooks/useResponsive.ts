@@ -15,6 +15,7 @@ export const useResponsive = () => {
   const [sizes, setSizes] = useState<ResponsiveSizes>(defaultSize);
 
   const handleResize = useCallback(() => {
+    // rough gauge of the screen sizes
     const values = {
       xs: 480,
       sm: 700,

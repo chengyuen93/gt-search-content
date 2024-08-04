@@ -2,9 +2,6 @@
   padding: 0 160px;
   background-color: var(--gt-grey);
   min-height: 24px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
 }
 
 .header_icon {

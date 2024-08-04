@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router-dom';
-import { PageWrapper } from '../page-wrapper';
 import { useCallback, useContext, useEffect } from 'react';
 
 import { SearchBar, SearchResults } from '../../components';
+import { PageWrapper } from '../page-wrapper';
 import { AuthContext } from '../../context';
 import { FLEX_1, FLEX_COL_LEFT_START, PAGE, routes } from '../../constants';
 import { useSearchContent, useSearchSuggestions } from '../../hooks';
+
 import styles from './search.module.css';
 
 export const SearchPage = () => {

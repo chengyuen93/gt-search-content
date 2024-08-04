@@ -1,3 +1,5 @@
+// texts that are used in the web page
+
 // page header
 export const OFFICIAL_TEXT = 'An Official Website of the ';
 export const OFFICIAL_TEXT_BOLD = 'Singapore Government';

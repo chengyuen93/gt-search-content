@@ -8,11 +8,10 @@ import {
   useRef,
   useState,
 } from 'react';
+
 import { SearchButton } from '../search-button';
-import styles from './search-bar.module.css';
 import { Image } from '../image';
 import { SharedImages } from '../../assets';
-import fontStyles from '../fonts/fonts.module.css';
 import { useDebouncedValue, useResponsive } from '../../hooks';
 import { HighlightableText } from '../../types';
 import { Suggestions } from '../suggestions';
@@ -21,7 +20,11 @@ import {
   MIN_SHOW_CLEAR_BUTTON_TEXT_COUNT,
   MIN_SUGGESTION_TEXT_COUNT,
   HIGHLIGHTED_SUGGESTION_ITEM_CLASSNAME_IDENTIFIER,
+  FLEX_ROW_CENTER,
 } from '../../constants';
+
+import styles from './search-bar.module.css';
+import fontStyles from '../fonts/fonts.module.css';
 
 interface SearchBarProps {
   suggestions?: HighlightableText[];
@@ -45,26 +48,25 @@ export const SearchBar = ({
   const [inputValue, setInputValue] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputContainerRef = useRef<HTMLDivElement | null>(null);
+
   const showSuggestions = useMemo(() => !!onSuggest, [onSuggest]);
 
+  const searchBarClassName = useMemo(() => {
+    let cName = `${styles.search_bar} ${FLEX_ROW_CENTER}`;
+    if (isFocused) cName += ` ${styles.search_bar_focused}`;
+    if (isOpen) cName += ` ${styles.search_bar_opened}`;
+
+    return cName;
+  }, [isFocused, isOpen]);
+
+  // use debounced input value so that the suggestions api is not called
+  // every time the user types something
   const debouncedValue = useDebouncedValue({
     value: inputValue,
     defaultValue: '',
   });
-
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const inputContainerRef = useRef<HTMLDivElement | null>(null);
-
-  const searchBarClassName = useMemo(() => {
-    let cName = styles.search_bar;
-    if (isFocused) {
-      cName = `${cName} ${styles.search_bar_focused}`;
-    }
-    if (isOpen) {
-      cName = `${cName} ${styles.search_bar_opened}`;
-    }
-    return cName;
-  }, [isFocused, isOpen]);
 
   const { isXsScreen } = useResponsive();
 
@@ -74,17 +76,6 @@ export const SearchBar = ({
       handleBlurInput();
     },
     [onSearch, inputValue]
-  );
-
-  const handleSelected = useCallback(
-    (selectedText: string) => {
-      setIsOpen(false);
-      setInputValue(selectedText);
-      setTimeout(() => {
-        handleSearch(selectedText);
-      }, 10);
-    },
-    [handleSearch]
   );
 
   const handleClear = useCallback(() => {
@@ -111,7 +102,11 @@ export const SearchBar = ({
   const onFocus = () => {
     setIsFocused(true);
   };
+
   const onBlur = (e: FocusEvent) => {
+    // add this check so that we know that what is being clicked on
+    // so that the when the suggestions are clicked on, the dropdown
+    // will not closed before the click is registered
     if (
       !e.relatedTarget?.classList.contains(SUGGESTION_ITEM_CLASSNAME_IDENTIFIER)
     ) {
@@ -119,9 +114,23 @@ export const SearchBar = ({
     }
   };
 
+  // ===== only when suggestion feature is used
+  const handleSelected = useCallback(
+    (selectedText: string) => {
+      setIsOpen(false);
+      setInputValue(selectedText);
+      setTimeout(() => {
+        handleSearch(selectedText);
+      }, 10);
+    },
+    [handleSearch]
+  );
+  // =====
+
   useEffect(() => {
     if (!onSuggest) return;
 
+    // call the suggest api when debounced value changes instead of the input value
     onSuggest(debouncedValue);
   }, [debouncedValue, onSuggest]);
 
@@ -134,7 +143,9 @@ export const SearchBar = ({
 
     // set `suggestions` as dependency because `setIsOpen` should be triggered when `suggestions` change
     // but whether it should be open depends on `inputValue.length` is more than a certain character length
-    // but we do not want the fn to be trigger everytime `inputValue.length` changes
+    // but we do not want the fn to be trigger everytime `inputValue.length` changes, whereby there is a gap
+    // between input changes and suggestions changes due to api call, there might be a split second showing wrong data
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused, suggestions, showSuggestions]);
 
@@ -144,6 +155,7 @@ export const SearchBar = ({
       e.altKey ||
       e.ctrlKey ||
       e.shiftKey ||
+      // to identify that there is a suggestion being selected, the selection event will be handled by the suggestion dropdown
       !!document.getElementsByClassName(
         HIGHLIGHTED_SUGGESTION_ITEM_CLASSNAME_IDENTIFIER
       ).length
@@ -157,7 +169,7 @@ export const SearchBar = ({
     <div className={searchBarClassName}>
       <div
         ref={inputContainerRef}
-        className={styles.search_bar_input_container}
+        className={`${styles.search_bar_input_container} ${FLEX_ROW_CENTER}`}
         onClick={handleFocusInput}
       >
         <input

@@ -51,6 +51,12 @@ body {
   align-items: flex-start;
 }
 
+.flex_row_center {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .page {
   padding-left: 160px;
   padding-right: 160px;

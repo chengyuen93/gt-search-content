@@ -1,4 +1,7 @@
 import { useCallback, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { PageWrapper } from '../page-wrapper';
 import { Button, H3 } from '../../components';
 import {
   FLEX_1,
@@ -8,11 +11,9 @@ import {
   PAGE,
   routes,
 } from '../../constants';
-import { PageWrapper } from '../page-wrapper';
-import styles from './login.module.css';
-import { useNavigate } from 'react-router-dom';
-
 import { AuthContext } from '../../context';
+
+import styles from './login.module.css';
 
 export const LoginPage = () => {
   const navigate = useNavigate();

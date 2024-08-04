@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
-import { useApi } from './useApi';
 
+import { useApi } from './useApi';
 import { MAX_SHOW_SEARCH_RESULT_COUNT, searchContentApi } from '../constants';
 import {
   ApiRequestProps,
@@ -19,6 +19,12 @@ interface SearchContentReturnProps
   searchContent: (props: SearchContentProps) => Promise<void>;
 }
 
+/**
+ * filter the given mocked query results which contain matches for the search text
+ * @param resultItems
+ * @param searchText
+ * @returns
+ */
 const extractHighligtedContent = (
   resultItems: ResultItem[],
   searchText: string
@@ -44,11 +50,11 @@ const extractHighligtedContent = (
       modifiedResultItems.push({
         ...item,
         DocumentExcerpt: filteredDocumentExcerpt ?? {
-          Text: item.DocumentExcerpt.Text,
+          Text: item.DocumentExcerpt.Text, // if filtered data is undefined, then we are only interested in the text
           Highlights: [],
         },
         DocumentTitle: filteredDocumentTitle ?? {
-          Text: item.DocumentTitle.Text,
+          Text: item.DocumentTitle.Text, // if filtered data is undefined, then we are only interested in the text
           Highlights: [],
         },
       });

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+
 import { Huge } from '../../components';
 import {
   BACK_TO_LOGIN,
@@ -8,8 +9,9 @@ import {
   PAGE,
   routes,
 } from '../../constants';
-import styles from './not-found-page.module.css';
 import { PageWrapper } from '../page-wrapper';
+
+import styles from './not-found-page.module.css';
 
 export const NotFoundPage = () => {
   return (

@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+
 import { ApiRequestProps, ApiResponseProps, HTTPMethods } from '../types';
 
 export const useApi = <T>(): ApiResponseProps<T> => {

@@ -24,6 +24,9 @@ interface MixedHighlightTextProps {
   highlightTextProps?: TextProps;
 }
 
+/**
+ * the base Text component
+ */
 const DisplayText = ({
   children,
   className,
@@ -67,6 +70,7 @@ export const Text = (props: TextProps) => (
   <TextWrapper fontClass={styles.display_body} {...props} />
 );
 
+// offical text is handled differently because the font specs used are different
 export const OfficialText = (props: TextProps) => {
   const fontClass = useMemo(
     () =>
@@ -78,6 +82,10 @@ export const OfficialText = (props: TextProps) => {
   return <TextWrapper fontClass={fontClass} {...props} />;
 };
 
+/**
+ * to construct sentences that have a mixed of both regular text and highlighted text
+ * provide the flexibility of controlling the styling of the regular and highlighted text separately
+ */
 export const MixedHighlightText = ({
   info,
   regularTextProps,
@@ -85,38 +93,41 @@ export const MixedHighlightText = ({
   RegularTextComponent,
   HighlightedTextComponent,
 }: MixedHighlightTextProps) => {
-  const text = info.Text;
+  const { Text: text, Highlights: highlights } = info;
+
+  if (!highlights.length)
+    return (
+      <RegularTextComponent {...regularTextProps}>{text}</RegularTextComponent>
+    );
 
   return (
     <RegularTextComponent {...regularTextProps}>
-      {info.Highlights.length
-        ? info.Highlights.map(
-            (offset: Offsets, index: number, array: Offsets[]) => {
-              let prevEndIndex = 0;
-              const items = [];
-              if (index !== 0) {
-                // get the index where the previous highlight text end to start the current loop
-                prevEndIndex = array[index - 1].EndOffset;
-              }
-              // for regular text
-              items.push(text.slice(prevEndIndex, offset.BeginOffset));
-              // for the current highlight text
-              items.push(
-                <HighlightedTextComponent
-                  key={`${offset.BeginOffset}-${offset.EndOffset}`}
-                  {...highlightTextProps}
-                >
-                  {text.slice(offset.BeginOffset, offset.EndOffset)}
-                </HighlightedTextComponent>
-              );
-              if (index === array.length - 1) {
-                // after the last highlight text, handle the normal text after the highlight text
-                items.push(text.slice(offset.EndOffset));
-              }
-              return items;
-            }
-          )
-        : text}
+      {info.Highlights.map(
+        (offset: Offsets, index: number, array: Offsets[]) => {
+          let prevEndIndex = 0;
+          const items = [];
+          if (index !== 0) {
+            // get the index where the previous highlight text end to start the current loop
+            prevEndIndex = array[index - 1].EndOffset;
+          }
+          // for regular text
+          items.push(text.slice(prevEndIndex, offset.BeginOffset));
+          // for the current highlight text
+          items.push(
+            <HighlightedTextComponent
+              key={`${offset.BeginOffset}-${offset.EndOffset}`}
+              {...highlightTextProps}
+            >
+              {text.slice(offset.BeginOffset, offset.EndOffset)}
+            </HighlightedTextComponent>
+          );
+          if (index === array.length - 1) {
+            // after the last highlight text, handle the regular text after the highlight text
+            items.push(text.slice(offset.EndOffset));
+          }
+          return items;
+        }
+      )}
     </RegularTextComponent>
   );
 };

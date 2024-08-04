@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+
 import { useApi } from './useApi';
 import {
   ApiRequestProps,
@@ -38,6 +39,7 @@ export const useSearchSuggestions = (): SearchSuggestionReturnProps => {
     async ({ searchText }: SearchSuggestionsProps) => {
       searchText = searchText.trim();
       if (searchText.length < MIN_SUGGESTION_TEXT_COUNT) {
+        // when less than the required search text length, return nothing
         setData([]);
         return;
       }
