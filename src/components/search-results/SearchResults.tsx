@@ -87,8 +87,8 @@ export const SearchResults = ({
   return (
     <div className={styles.search_result_container}>
       {isLoading && <H3>{CONTENT_LOADING}</H3>}
-      {isFailed && <H3>{CONTENT_FAILED}</H3>}
-      {hasNoContent && isSucessful && <H3>{NO_CONTENT}</H3>}
+      {!isLoading && isFailed && <H3 isError>{CONTENT_FAILED}</H3>}
+      {!isLoading && hasNoContent && isSucessful && <H3>{NO_CONTENT}</H3>}
       {summaryData && !hasNoContent && !isFailed && !isLoading && (
         <>
           <ResultSummary

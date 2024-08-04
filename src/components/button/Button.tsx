@@ -11,9 +11,11 @@ interface ButtonProps {
 
 export const Button = ({ icon, text, className, onClick }: ButtonProps) => {
   const classNameString = useMemo(() => {
-    const buttonClass = `${styles.button} ${icon ? styles.with_icon : ''}`;
+    let buttonClass = styles.button;
+    if (text && icon) buttonClass = `${buttonClass} ${styles.with_icon}`;
+    if (!text && icon) buttonClass = `${buttonClass} ${styles.icon_only}`;
     return className ? `${className} ${buttonClass}` : buttonClass;
-  }, [className, icon]);
+  }, [className, icon, text]);
 
   const textClassName = useMemo(
     () =>

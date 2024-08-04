@@ -9,6 +9,10 @@
   border: 0;
 }
 
+.icon_only {
+  padding: 15px;
+}
+
 .with_icon {
   padding: 15px 34px 15px 35px;
 }

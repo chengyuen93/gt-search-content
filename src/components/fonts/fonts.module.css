@@ -18,32 +18,33 @@
   font-family: Open Sans;
   color: var(--gt-black);
   white-space: break-spaces;
+  word-wrap: break-word;
 }
 
 .huge {
-  font-size: 50px;
-  line-height: 60px;
+  font-size: 3.125rem;
+  line-height: 3.75rem;
 }
 
 .h3 {
-  font-size: 22px;
-  line-height: 28px;
+  font-size: 1.375rem;
+  line-height: 1.75rem;
 }
 
 .h4 {
-  font-size: 18px;
-  line-height: 26px;
+  font-size: 1.125rem;
+  line-height: 1.625rem;
 }
 
 .display_body {
-  font-size: 16px;
-  line-height: 24px;
+  font-size: 1rem;
+  line-height: 1.5rem;
   letter-spacing: 0.14000000059604645px;
 }
 
 .h6 {
-  font-size: 14px;
-  line-height: 26px;
+  font-size: 0.875rem;
+  line-height: 1.625rem;
   letter-spacing: 0.11999999731779099px;
 }
 
@@ -53,4 +54,8 @@
 
 .regular {
   font-weight: 400;
+}
+
+span.error {
+  color: var(--gt-error);
 }

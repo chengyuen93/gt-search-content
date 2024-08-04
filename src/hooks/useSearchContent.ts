@@ -69,10 +69,7 @@ export const useSearchContent = (): SearchContentReturnProps => {
   const searchContent = useCallback(
     async ({ searchText }: SearchContentProps) => {
       searchText = searchText.trim();
-      if (!searchText) {
-        setData(undefined);
-        return;
-      }
+
       const request: ApiRequestProps = {
         url: searchContentApi.url,
         method: searchContentApi.method,
@@ -80,6 +77,11 @@ export const useSearchContent = (): SearchContentReturnProps => {
       const data = await sendRequest(request);
       if (!data) {
         setData(undefined);
+        return;
+      }
+      if (!searchText) {
+        // if no search text, assume returning all content
+        setData(data);
         return;
       }
       // need to modify some values in the data to mock query response

@@ -19,9 +19,6 @@
 .suggestion_item_highlighted {
   background-color: var(--gt-grey);
 }
-.suggestion_text_error {
-  color: var(--gt-error);
-}
 
 .suggestion_text_disabled {
   color: var(--gt-light-grey);

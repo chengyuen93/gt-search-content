@@ -5,6 +5,7 @@ import { HighlightableText, Offsets } from '../../types';
 interface TextProps extends PropsWithChildren {
   className?: string;
   isBold?: boolean;
+  isError?: boolean;
 }
 
 interface DisplayTextProps extends Omit<TextProps, 'className'> {
@@ -23,11 +24,19 @@ interface MixedHighlightTextProps {
   highlightTextProps?: TextProps;
 }
 
-const DisplayText = ({ children, className, isBold }: DisplayTextProps) => {
-  const classNameString = useMemo(
-    () => (isBold ? `${className} ${styles.semibold}` : className),
-    [isBold, className]
-  );
+const DisplayText = ({
+  children,
+  className,
+  isBold,
+  isError,
+}: DisplayTextProps) => {
+  const classNameString = useMemo(() => {
+    let cName = className;
+    if (isBold) cName = `${styles.semibold} ${cName}`;
+    if (isError) cName = `${styles.error} ${cName}`;
+    return cName;
+  }, [isBold, isError, className]);
+
   return (
     <span className={`${styles.text} ${classNameString}`}>{children}</span>
   );

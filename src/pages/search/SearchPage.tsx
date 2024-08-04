@@ -24,6 +24,7 @@ export const SearchPage = () => {
     data: suggestions,
     isLoading: suggestionsIsLoading,
     isFailed: suggestionsIsFailed,
+    isSuccessful: suggestionsIsSuccessful,
   } = useSearchSuggestions();
 
   const handleSearch = useCallback(
@@ -51,6 +52,7 @@ export const SearchPage = () => {
         <SearchBar
           suggestionsIsLoading={suggestionsIsLoading}
           suggestionsIsFailed={suggestionsIsFailed}
+          suggestionsIsSuccessful={suggestionsIsSuccessful}
           suggestions={suggestions}
           onSearch={handleSearch}
           onSuggest={handleSuggest}

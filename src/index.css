@@ -1,6 +1,10 @@
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro");
 @import url("https://fonts.googleapis.com/css?family=Open+Sans");
 
+html {
+  font-size: 16px;
+}
+
 body {
   margin: 0;
   font-family: "Open Sans", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
@@ -50,6 +54,7 @@ body {
 .page {
   padding-left: 160px;
   padding-right: 160px;
+  box-sizing: border-box;
 }
 
 @media only screen and (max-width: 700px) {

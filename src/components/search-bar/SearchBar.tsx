@@ -27,6 +27,7 @@ interface SearchBarProps {
   suggestions?: HighlightableText[];
   suggestionsIsLoading?: boolean;
   suggestionsIsFailed?: boolean;
+  suggestionsIsSuccessful?: boolean;
   onSelected?: () => void;
   onSuggest?: (searchText: string) => void;
   onSearch: (searchText: string) => void;
@@ -35,6 +36,7 @@ interface SearchBarProps {
 export const SearchBar = ({
   suggestionsIsLoading = false,
   suggestionsIsFailed = false,
+  suggestionsIsSuccessful = false,
   suggestions = [],
   onSuggest,
   onSearch,
@@ -64,7 +66,7 @@ export const SearchBar = ({
     return cName;
   }, [isFocused, isOpen]);
 
-  const { isSmallScreen } = useResponsive();
+  const { isXsScreen } = useResponsive();
 
   const handleSearch = useCallback(
     (text?: string) => {
@@ -183,12 +185,13 @@ export const SearchBar = ({
             suggestions={suggestions}
             isLoading={suggestionsIsLoading}
             isFailed={suggestionsIsFailed}
+            isSuccessful={suggestionsIsSuccessful}
             onSelected={handleSelected}
           />
         )}
       </div>
 
-      <SearchButton isSmall={isSmallScreen} onClick={() => handleSearch()} />
+      <SearchButton isSmall={isXsScreen} onClick={() => handleSearch()} />
     </div>
   );
 };

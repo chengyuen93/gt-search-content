@@ -2,10 +2,12 @@ import { useCallback, useEffect, useState } from 'react';
 
 // can add more sizes if need to
 type ResponsiveSizes = {
+  isXsScreen: boolean;
   isSmallScreen: boolean;
 };
 
 const defaultSize: ResponsiveSizes = {
+  isXsScreen: false,
   isSmallScreen: false,
 };
 
@@ -14,7 +16,7 @@ export const useResponsive = () => {
 
   const handleResize = useCallback(() => {
     const values = {
-      xs: 0,
+      xs: 480,
       sm: 700,
       md: 905,
       lg: 1240,
@@ -23,6 +25,7 @@ export const useResponsive = () => {
 
     const width = window.innerWidth;
     setSizes({
+      isXsScreen: width <= values.xs,
       isSmallScreen: width <= values.sm,
     });
   }, []);
