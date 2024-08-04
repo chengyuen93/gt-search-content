@@ -19,7 +19,7 @@ interface ResultSummaryProps {
 interface SearchResultsProps {
   isLoading: boolean;
   isFailed: boolean;
-  isSucessful: boolean;
+  isSuccessful: boolean;
   content: SearchContentResponse | undefined;
 }
 
@@ -39,7 +39,7 @@ const SearchResultItem = ({ resultItem }: ResultItemProps) => {
   const onLinkClick = () => window.open(resultItem.DocumentURI, '__tab__');
 
   return (
-    <div className={styles.result_item}>
+    <div data-testid="result-item" className={styles.result_item}>
       <div className={styles.title_container}>
         <div className={styles.title_link_container} onClick={onLinkClick}>
           <H3 isBold className={styles.title}>
@@ -63,14 +63,16 @@ const SearchResultItem = ({ resultItem }: ResultItemProps) => {
 };
 
 const ResultWrapper = ({ children }: PropsWithChildren) => (
-  <div className={styles.search_result_container}>{children}</div>
+  <div data-testid="search-results" className={styles.search_result_container}>
+    {children}
+  </div>
 );
 
 export const SearchResults = ({
   content,
   isLoading,
   isFailed,
-  isSucessful,
+  isSuccessful,
 }: SearchResultsProps) => {
   const hasNoContent = useMemo(() => !content?.TotalNumberOfResults, [content]);
   const summaryData: ResultSummaryProps | undefined = useMemo(() => {
@@ -104,7 +106,7 @@ export const SearchResults = ({
     );
   }
 
-  if (isSucessful && hasNoContent) {
+  if (isSuccessful && hasNoContent) {
     return (
       <ResultWrapper>
         <H3>{NO_CONTENT}</H3>

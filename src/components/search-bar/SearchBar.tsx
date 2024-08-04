@@ -108,7 +108,9 @@ export const SearchBar = ({
     // so that the when the suggestions are clicked on, the dropdown
     // will not closed before the click is registered
     if (
-      !e.relatedTarget?.classList.contains(SUGGESTION_ITEM_CLASSNAME_IDENTIFIER)
+      !e.relatedTarget?.classList?.contains(
+        SUGGESTION_ITEM_CLASSNAME_IDENTIFIER
+      )
     ) {
       setIsFocused(false);
     }
@@ -166,13 +168,14 @@ export const SearchBar = ({
   };
 
   return (
-    <div className={searchBarClassName}>
+    <div data-testid="search-bar" className={searchBarClassName}>
       <div
         ref={inputContainerRef}
         className={`${styles.search_bar_input_container} ${FLEX_ROW_CENTER}`}
         onClick={handleFocusInput}
       >
         <input
+          data-testid="search-bar-input"
           ref={inputRef}
           value={inputValue}
           className={`${styles.search_bar_input} ${fontStyles.h4}`}
@@ -184,6 +187,7 @@ export const SearchBar = ({
         />
         {inputValue.length >= MIN_SHOW_CLEAR_BUTTON_TEXT_COUNT && (
           <Image
+            testId="close-button"
             className={styles.clear_button}
             height={28}
             width={28}

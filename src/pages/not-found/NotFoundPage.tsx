@@ -12,7 +12,6 @@ import {
 import { PageWrapper } from '../page-wrapper';
 
 import styles from './not-found-page.module.css';
-
 export const NotFoundPage = () => {
   return (
     <PageWrapper>

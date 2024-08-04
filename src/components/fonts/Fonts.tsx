@@ -6,6 +6,7 @@ interface TextProps extends PropsWithChildren {
   className?: string;
   isBold?: boolean;
   isError?: boolean;
+  testId?: string;
 }
 
 interface DisplayTextProps extends Omit<TextProps, 'className'> {
@@ -32,6 +33,7 @@ const DisplayText = ({
   className,
   isBold,
   isError,
+  testId,
 }: DisplayTextProps) => {
   const classNameString = useMemo(() => {
     let cName = className;
@@ -41,7 +43,9 @@ const DisplayText = ({
   }, [isBold, isError, className]);
 
   return (
-    <span className={`${styles.text} ${classNameString}`}>{children}</span>
+    <span data-testid={testId} className={`${styles.text} ${classNameString}`}>
+      {children}
+    </span>
   );
 };
 

@@ -68,6 +68,9 @@ const SuggestionItem = ({
 
   return (
     <div
+      data-testid={
+        'suggestion-item' + (typeof index === 'number' ? `-${index}` : '')
+      }
       tabIndex={-1}
       className={className}
       onMouseEnter={handleHover}
@@ -96,7 +99,11 @@ const SuggestionItem = ({
 };
 
 const ContainerWrapper = ({ style, children }: ContainerWrapperProps) => (
-  <div className={styles.suggestion_container} style={style}>
+  <div
+    data-testid="suggestion-dropdown"
+    className={styles.suggestion_container}
+    style={style}
+  >
     {children}
   </div>
 );

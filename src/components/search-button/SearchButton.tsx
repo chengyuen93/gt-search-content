@@ -16,6 +16,7 @@ export const SearchButton = ({
 }: SearchButtonProps) => {
   return (
     <Button
+      testId="search-button"
       className={className}
       icon={<Image height={26} width={26} url={SharedImages.search} />}
       text={isSmall ? '' : SEARCH}

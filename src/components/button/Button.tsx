@@ -7,10 +7,17 @@ interface ButtonProps {
   icon?: ReactNode;
   text?: string;
   className?: string;
+  testId?: string;
   onClick: () => void;
 }
 
-export const Button = ({ icon, text, className, onClick }: ButtonProps) => {
+export const Button = ({
+  icon,
+  text,
+  className,
+  testId,
+  onClick,
+}: ButtonProps) => {
   const classNameString = useMemo(() => {
     let buttonClass = `${styles.button} ${FLEX_ROW_CENTER}`;
     if (icon) {
@@ -28,7 +35,7 @@ export const Button = ({ icon, text, className, onClick }: ButtonProps) => {
   );
 
   return (
-    <button className={classNameString} onClick={onClick}>
+    <button data-testid={testId} className={classNameString} onClick={onClick}>
       {icon}
       {text && (
         <H4 isBold className={textClassName}>

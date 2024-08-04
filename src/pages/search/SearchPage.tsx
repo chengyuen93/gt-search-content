@@ -66,7 +66,7 @@ export const SearchPage = () => {
           content={content}
           isLoading={contentIsLoading}
           isFailed={contentIsFailed}
-          isSucessful={contentIsSuccessful}
+          isSuccessful={contentIsSuccessful}
         />
       </div>
     </PageWrapper>
