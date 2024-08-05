@@ -4,7 +4,7 @@ This project is created using Create React App and Typescript. This is for GovTe
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the project directory, first run `npm install` to install the node module packages. Then, you can run:
 
 ### `npm start`
 
